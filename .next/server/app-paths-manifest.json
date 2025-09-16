@@ -1,5 +1,0 @@
-{
-  "/(views)/home/page": "app/(views)/home/page.js",
-  "/page": "app/page.js",
-  "/(views)/edit/page": "app/(views)/edit/page.js"
-}
