@@ -1,6 +1,8 @@
 "use client"
 
+import { useState } from 'react';
 import styles from './edit.module.css'
+import UserService from '@/services/userservice';
 
 
 const users: { name: string, peleton: string, payed: boolean, invite: number, present: number }[] = [
@@ -37,9 +39,24 @@ const users: { name: string, peleton: string, payed: boolean, invite: number, pr
 ]
 
 export default function EditPage() {
+    const [peletonInputValue, setPeletonInputValue] = useState<string>('');
+    const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peleton: string, invite: boolean }>({ name: '', peleton: '', invite: false });
+    
 
     const changePayed = (index: number, item: unknown) => {
         console.log('yooooooooo')
+    }
+
+    const addPeleton = async () => {
+        if (peletonInputValue.trim() === '') return;
+        await UserService.addPeletonName(peletonInputValue)
+        console.log('peleton name', peletonInputValue)
+    }
+
+    const addSchutter = async () => {
+        if (schutterInputValue.name.trim() === '' || schutterInputValue.peleton.trim() === '') return;
+        await UserService.addNewSchooter(schutterInputValue)
+        console.log('PELEOTO?', schutterInputValue)
     }
 
   return (
@@ -47,17 +64,21 @@ export default function EditPage() {
         <div className={styles.inputs}>
             <div className={styles.peleton}>
                 <h1>Nieuw peleton</h1>
-                <input type="text" placeholder='peleton naam' />
-                <button>Toevoegen</button>
+                <input type="text" placeholder='peleton naam' value={peletonInputValue} onChange={(e) => setPeletonInputValue(e.target.value)} />
+                <button onClick={addPeleton}>Toevoegen</button>
             </div>
             <div className={styles.user}>
                 <h1>Nieuwe schutter</h1>
-                <input type="text" />
-                <select name="" id="">
-                    <option value="">Peleton</option>
+                <input type="text" placeholder='voor- en achternaam' value={schutterInputValue.name} onChange={(e) => setSchutterInputValue({...schutterInputValue, name: e.target.value})}/>
+                <select name="" id="" value={schutterInputValue.peleton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peleton: e.target.value})}> 
+                    <option value="" disabled></option>
+                    <option value="Peleton">Peleton</option>
+                    <option value="Screamingg">Screamingg</option>
+                    <option value="De daltons">De Daltons</option>
+                    <option value="Parijs">Parijs</option>
                 </select>
-                <label ><input type="checkbox" />Invité</label>
-                <button>Toevoegen</button>
+                <label ><input type="checkbox" checked={schutterInputValue.invite} onChange={(e) => setSchutterInputValue({...schutterInputValue, invite: e.target.checked})}/>Invité</label>
+                <button onClick={addSchutter}>Toevoegen</button>
             </div>
         </div>
         <div className={styles.outputs}>
