@@ -1,0 +1,54 @@
+/*!********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/app/(views)/edit/edit.module.css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************/
+.edit_container__gHPue {
+    width: 100vw;
+    height: 100vh;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+}
+
+.edit_inputs__zQQZA {
+    flex: 0 0 40%;
+    width: 100%;
+
+    padding: 15px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.edit_peleton__7PC3q {
+    width: 25%;
+    height: 100%;
+
+    background-color: green;
+}
+
+.edit_user__oF0cz {
+    width: 40%;
+    height: 100%;
+
+    background-color: purple;
+}
+
+.edit_outputs__w69yU {
+    flex: 1 1 60%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.edit_table__U9xRE {
+    width: 80%;
+}

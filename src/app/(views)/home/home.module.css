@@ -1,0 +1,36 @@
+.container {
+    width: 75vw;
+    height: 100vh;
+
+    padding: 25px;
+
+    columns: 3;
+    column-gap: 40px;
+}
+
+.list {
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+    list-style-type: none;
+}
+
+
+.header {
+    break-inside: avoid;
+
+    text-transform: uppercase;
+    font-weight: 600;
+    background-color: orangered;
+    padding: 5px;
+}
+
+.user {
+    break-inside: avoid;
+
+    display: grid;
+    grid-template-columns: 50% 10% 40%;
+    grid-template-rows: 1fr;
+
+    padding: 5px;
+}

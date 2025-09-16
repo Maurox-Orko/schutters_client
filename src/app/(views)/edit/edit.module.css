@@ -1,0 +1,51 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+}
+
+.inputs {
+    flex: 0 0 40%;
+    width: 100%;
+
+    padding: 15px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.peleton {
+    width: 25%;
+    height: 100%;
+
+    background-color: green;
+}
+
+.user {
+    width: 40%;
+    height: 100%;
+
+    background-color: purple;
+}
+
+.outputs {
+    flex: 1 1 60%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.table {
+    width: 80%;
+}
