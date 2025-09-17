@@ -23,7 +23,7 @@ export default function EditPage() {
     getWebSocket();
 
     const unsubPeletons = subscribe('PELETONS', (data: any) => { setAllPeletons(data); setPeletonInputValue(''); });
-    const unsubShooters = subscribe('SHOOTERS', (data: any) => { setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
+    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT'); setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
     return () => { unsubPeletons(); unsubShooters() }
     }
 
