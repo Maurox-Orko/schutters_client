@@ -56,14 +56,15 @@ export default function EditPage() {
 
 
     const fetchPelotons = async () => {
-        try { await UserService.getPelotons().then((res) => { setAllPelotons(res); }); } 
+        try { await UserService.getPelotons().then((peletons) => { setAllPelotons(peletons); console.log('PELETONSSS', peletons) }); } 
         catch (error) { console.error("Failed to fetch pelotons:", error); }
     };
 
     const fetchSchutters = async () => {
         try {
             console.log('Fetching schutters')
-            await UserService.getAllSchutters().then((res) => { setAllSchutters(res); console.log('res', res) });
+            const result = await UserService.getAllSchutters();
+            console.log('result', result)
             console.log("Schuttters", allSchutters);
         } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
@@ -74,8 +75,12 @@ export default function EditPage() {
     useEffect(() => {
         websocket();
 
-        fetchPelotons();
-        fetchSchutters();
+
+        const fetchData = async () => {
+            await fetchPelotons();  // wait for this to finish
+            await fetchSchutters();  // runs only after fetchPelotons is done
+        };
+        fetchData();
     }, []);
   //#endregion
 
