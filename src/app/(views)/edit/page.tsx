@@ -5,7 +5,7 @@ import styles from './edit.module.css'
 import UserService from '@/services/userservice';
 import { SchutterModel } from '@/models/schutter.model';
 import { PeletonModel } from '@/models/peleton.model';
-import { getWebSocket } from '@/services/socket';
+import { getWebSocket, subscribe } from '@/services/socket';
 
 export default function EditPage() {
 
@@ -19,11 +19,28 @@ export default function EditPage() {
 
 
   //#region Functions / Handlers
-  const websocket = async () => {
+    const websocket = async () => {
     getWebSocket();
 
-    // const unsubscribe = subscribe('PELETONS', (data: any) => { setAllPeletons(data); })
-  }
+    const unsubPeletons = subscribe('PELETONS', (data: any) => { setAllPeletons(data); setPeletonInputValue(''); });
+    const unsubShooters = subscribe('SHOOTERS', (data: any) => { setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
+    return () => { unsubPeletons(); unsubShooters() }
+    }
+
+    const addPeleton = async () => {
+        if (peletonInputValue.trim() === '') return;
+        await UserService.addPeletonName(peletonInputValue)
+    }
+
+    const addSchutter = async () => {
+        if (schutterInputValue.name.trim() === '' || schutterInputValue.peleton.trim() === '') return;
+        await UserService.addNewSchooter(schutterInputValue)
+    }
+    
+
+    const changePayed = (index: number, item: unknown) => {
+        console.log('yooooooooo')
+    }
 
 
 
@@ -51,33 +68,14 @@ export default function EditPage() {
         } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
     }
-    
-
-    const changePayed = (index: number, item: unknown) => {
-        console.log('yooooooooo')
-    }
-
-    const addPeleton = async () => {
-        console.log('peleton name', peletonInputValue)
-        if (peletonInputValue.trim() === '') return;
-        await UserService.addPeletonName(peletonInputValue)
-    }
-
-    const addSchutter = async () => {
-        console.log('PELEOTO?', schutterInputValue)
-        if (schutterInputValue.name.trim() === '' || schutterInputValue.peleton.trim() === '') return;
-        await UserService.addNewSchooter(schutterInputValue)
-    }
   //#endregion
 
   //#region Effects / Lifecycle
     useEffect(() => {
-
-
-
+        websocket();
 
         fetchPeletons();
-        // fetchSchutters();
+        fetchSchutters();
     }, []);
   //#endregion
 

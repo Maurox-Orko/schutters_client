@@ -4,8 +4,22 @@ interface QueuedMessage { route: string; payload: unknown; resolve: (value: any)
 let messageQueue: QueuedMessage[] = [];
 
 
+type Callback = (payload: any) => void;
+
+const listeners: Record<string, Callback[]> = {};
+
+export function subscribe(route: string, cb: Callback) {
+    if (!listeners[route]) listeners[route] = [];
+    listeners[route].push(cb);
+    return () => {
+        listeners[route] = listeners[route].filter(fn => fn !== cb);
+    };
+}
 
 
+function emit(route: string, payload: any) {
+    listeners[route]?.forEach(cb => cb(payload));
+}
 
 
 export function getWebSocket(): WebSocket {
@@ -22,14 +36,8 @@ export function getWebSocket(): WebSocket {
             const response = JSON.parse(event.data);
 
             switch (response.route) {
-                case 'PELETONS': {
-                    console.log('Broadcast PELETONS:', response.payload);
-                    break;
-                }
-                case 'SHOOTERS': {
-                    console.log('Broadcast SHOOTERS:', response.payload);
-                    break;
-                }
+                case 'PELETONS': { emit('PELETONS', response.payload); break; }
+                case 'SHOOTERS': { emit('SHOOTERS', response.payload); break; }
                 default: {
                     break;
                 }
