@@ -89,7 +89,7 @@ export default function EditPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    { allSchutters.map((item, index) => (
+                    {/* { allSchutters.map((item, index) => (
                         <tr key={index}>
                             <td>{item.name}</td>
                             <td>{item.peleton}</td>
@@ -98,7 +98,7 @@ export default function EditPage() {
                             <td>{item.present}</td>
                             <td>add / delete</td>
                         </tr>
-                    ))}
+                    ))} */}
                 </tbody>
             </table>
         </div>
