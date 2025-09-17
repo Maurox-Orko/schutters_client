@@ -13,7 +13,7 @@ const UserService = {
     async addPelotonName(name: string): Promise<void> {  await sendOnce({ name }, '/add/peloton') },
 
     // TODO: change route to add new schooter
-    async addNewSchooter(schutter: { name: string, peloton: string, invite: boolean }): Promise<unknown> { return await sendOnce(schutter, '/add/schooter')},
+    async addNewShooter(schutter: { name: string, peloton: string, invite: boolean }): Promise<unknown> { return await sendOnce(schutter, '/add/shooter')},
 
     // TODO: make sure to get pelotons
     async getPelotons(): Promise<PelotonModel[]> { return await sendOnce(null, '/get/all/pelotons')},

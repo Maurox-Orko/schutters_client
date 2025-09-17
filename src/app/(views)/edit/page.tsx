@@ -34,7 +34,7 @@ export default function EditPage() {
 
     const addSchutter = async () => {
         if (schutterInputValue.name.trim() === '' || schutterInputValue.peloton.trim() === '') return;
-        await UserService.addNewSchooter(schutterInputValue)
+        await UserService.addNewShooter(schutterInputValue)
     }
     
 
