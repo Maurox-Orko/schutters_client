@@ -1,4 +1,4 @@
 export interface PeletonModel {
-    peletonID: string,
-    name: string
+    _id: string,
+    name: string,
 }

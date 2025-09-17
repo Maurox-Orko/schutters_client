@@ -7,7 +7,7 @@ import { SchutterModel } from '@/models/schutter.model';
 import { PeletonModel } from '@/models/peleton.model';
 
 
-// function fetchPeleton
+// function fetchInitData()
 
 
 
@@ -50,8 +50,7 @@ export default function EditPage() {
     const addPeleton = async () => {
         console.log('peleton name', peletonInputValue)
         if (peletonInputValue.trim() === '') return;
-        const result = await UserService.addPeletonName(peletonInputValue)
-        // if (result) fetchPeletons();
+        await UserService.addPeletonName(peletonInputValue)
     }
 
     const addSchutter = async () => {
@@ -74,7 +73,7 @@ export default function EditPage() {
                 <select name="" id="" value={schutterInputValue.peleton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peleton: e.target.value})}> 
                     <option value="" disabled></option>
                     { allPeletons.map((item, index) => (
-                        <option value={item.peletonID} key={index}>{ item.name }</option>
+                        <option value={item._id} key={index}>{ item.name }</option>
                     ))}
                 </select>
                 <label ><input type="checkbox" checked={schutterInputValue.invite} onChange={(e) => setSchutterInputValue({...schutterInputValue, invite: e.target.checked})}/>Invité</label>

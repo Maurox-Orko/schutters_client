@@ -63,7 +63,6 @@ export function sendOnce(payload: unknown, route: string): Promise<any> {
         const listener = (event: MessageEvent) => {
             const response = JSON.parse(event.data);
             if (response.status !== undefined) {
-                console.log('response.data', response.data)
                 if (response.status === 200) resolve(response.data);
                 else reject(response.data);
                 socket.removeEventListener('message', listener);
