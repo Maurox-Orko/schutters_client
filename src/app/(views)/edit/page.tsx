@@ -118,7 +118,7 @@ export default function EditPage() {
                     { allSchutters.map((item, index) => (
                         <tr key={index}>
                             <td>{item.name}</td>
-                            <td>{item.peleton.name}</td>
+                            <td>{item.peleton?.name}</td>
                             <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(index, item)}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>
