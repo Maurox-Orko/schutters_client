@@ -33,6 +33,7 @@ export function sendOnce(message: unknown, location: string): Promise<any> {
 
         const ws = new WebSocket(`ws://5acfced5718a.ngrok-free.app/ws?apiKey=5417250d-1f8a-4946-b6db-8f5fe3008fc6`);
 
+
         ws.onopen = () => {
             ws.send(JSON.stringify({ route: location, payload: message }));
         };

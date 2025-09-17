@@ -3,8 +3,14 @@ import { sendOnce } from "./socket"
 import { PeletonModel } from "@/models/peleton.model"
 
 const UserService = {
+
+    // TODO: als ik een peleton naam aanmaak moet ik true terug krijgen als het succesvol gelukt is
+
+
+
+
     // TODO: change route to add new peleton name
-    async addPeletonName(name: string): Promise<void> {  await sendOnce({ name }, '/post/new/peleton') },
+    async addPeletonName(name: string): Promise<void> {  await sendOnce({ name }, '/add/peleton') },
 
     // TODO: change route to add new schooter
     async addNewSchooter(schutter: { name: string, peleton: string, invite: boolean }): Promise<unknown> { return await sendOnce(schutter, '/post/new/schooter')},
