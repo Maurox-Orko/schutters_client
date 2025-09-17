@@ -28,7 +28,7 @@
 // }
 
 
-export function sendOnce(message: unknown, location: string): Promise<unknown> {
+export function sendOnce(message: unknown, location: string): Promise<any> {
     return new Promise((resolve, reject) => {
         // console.log('process.env.REACT_APP_API_URL', process.env.REACT_APP_API_URL)
         const socket = new WebSocket(process.env.REACT_APP_API_URL + location);

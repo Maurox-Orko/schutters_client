@@ -8,7 +8,7 @@ const UserService = {
     async addNewSchooter(schutter: { name: string, peleton: string, invite: boolean }): Promise<unknown> { return await sendOnce(schutter, '/post/new/schooter')},
 
     // TODO: make sure to get peletons
-    // async getPeletons(): Promise<string[]> { return await sendOnce(null, '/get/peletons')}
+    async getPeletons(): Promise<{ peletonID: string, name: string }[]> { return await sendOnce(null, '/get/peletons')},
     
 
 

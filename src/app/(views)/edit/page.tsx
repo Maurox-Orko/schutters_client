@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './edit.module.css'
 import UserService from '@/services/userservice';
 
@@ -41,6 +41,19 @@ const users: { name: string, peleton: string, payed: boolean, invite: number, pr
 export default function EditPage() {
     const [peletonInputValue, setPeletonInputValue] = useState<string>('');
     const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peleton: string, invite: boolean }>({ name: '', peleton: '', invite: false });
+
+    useEffect(() => {
+        const fetchPeletons = async () => {
+            try {
+                console.log('Fetching')
+                const peletons = await UserService.getPeletons();
+                console.log("Peletons", peletons);
+            } 
+            catch (error) { console.error("Failed to fetch peletons:", error); }
+        };
+
+        fetchPeletons();
+    }, []);
     
 
     const changePayed = (index: number, item: unknown) => {
