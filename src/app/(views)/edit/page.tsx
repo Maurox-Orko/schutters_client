@@ -7,6 +7,13 @@ import { SchutterModel } from '@/models/schutter.model';
 import { PeletonModel } from '@/models/peleton.model';
 
 
+// function fetchPeleton
+
+
+
+
+
+
 
 export default function EditPage() {
     const [peletonInputValue, setPeletonInputValue] = useState<string>('');
@@ -15,25 +22,22 @@ export default function EditPage() {
     const [allPeletons, setAllPeletons] = useState<PeletonModel[]>([]);
 
 
+    const fetchPeletons = async () => {
+        try { await UserService.getPeletons().then((res) => { setAllPeletons(res); }); } 
+        catch (error) { console.error("Failed to fetch peletons:", error); }
+    };
+
+    const fetchSchutters = async () => {
+        try {
+            console.log('Fetching schutters')
+            await UserService.getAllSchutters().then((res) => { setAllSchutters(res); });
+            console.log("Schuttters", allSchutters);
+        } 
+        catch (error) { console.error("Failed to fetch Schutters:", error); }
+    }
+
+
     useEffect(() => {
-        const fetchPeletons = async () => {
-            try {
-                console.log('Fetching peletons')
-                await UserService.getPeletons().then((res) => { setAllPeletons(res); });
-                console.log("Peletons", allPeletons);
-            } 
-            catch (error) { console.error("Failed to fetch peletons:", error); }
-        };
-
-        const fetchSchutters = async () => {
-            try {
-                console.log('Fetching schutters')
-                await UserService.getAllSchutters().then((res) => { setAllSchutters(res); });
-                console.log("Schuttters", allSchutters);
-            } 
-            catch (error) { console.error("Failed to fetch Schutters:", error); }
-        }
-
         fetchPeletons();
         fetchSchutters();
     }, []);
@@ -46,7 +50,8 @@ export default function EditPage() {
     const addPeleton = async () => {
         console.log('peleton name', peletonInputValue)
         if (peletonInputValue.trim() === '') return;
-        await UserService.addPeletonName(peletonInputValue)
+        const result = await UserService.addPeletonName(peletonInputValue)
+        // if (result) fetchPeletons();
     }
 
     const addSchutter = async () => {

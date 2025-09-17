@@ -97,7 +97,7 @@ const items: { type: 'peleton' | 'schutter', name: string, points?: number, scor
 
 
 export default function HomePage() {
-    useEffect(() => { UserService.getSchutters().then((res) => console.log('res', res)) }, []);
+    useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
