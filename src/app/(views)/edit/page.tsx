@@ -23,7 +23,7 @@ export default function EditPage() {
     getWebSocket();
 
     const unsubPeletons = subscribe('PELETONS', (data: any) => { setAllPeletons(data); setPeletonInputValue(''); });
-    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT'); setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
+    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
     return () => { unsubPeletons(); unsubShooters() }
     }
 
@@ -115,16 +115,16 @@ export default function EditPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* { allSchutters.map((item, index) => (
+                    { allSchutters.map((item, index) => (
                         <tr key={index}>
                             <td>{item.name}</td>
-                            <td>{item.peleton}</td>
-                            <td><input type="checkbox" checked={item.payed} onChange={() => changePayed(index, item)}/></td>
+                            <td>{item.peleton.name}</td>
+                            <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(index, item)}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>
                             <td>add / delete</td>
                         </tr>
-                    ))} */}
+                    ))}
                 </tbody>
             </table>
         </div>
