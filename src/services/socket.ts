@@ -3,7 +3,12 @@ let ws: WebSocket | null = null;
 interface QueuedMessage { route: string; payload: unknown; resolve: (value: any) => void; reject: (reason?: any) => void; }
 let messageQueue: QueuedMessage[] = [];
 
-function getWebSocket(): WebSocket {
+
+
+
+
+
+export function getWebSocket(): WebSocket {
     if (!ws || ws.readyState === WebSocket.CLOSED) {
         // ws = new WebSocket(`ws://5acfced5718a.ngrok-free.app/ws?apiKey=5417250d-1f8a-4946-b6db-8f5fe3008fc6`);
         ws = new WebSocket(`ws://localhost:3000/ws?apiKey=5417250d-1f8a-4946-b6db-8f5fe3008fc6`);

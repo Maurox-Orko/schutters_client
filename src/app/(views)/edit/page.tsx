@@ -5,21 +5,37 @@ import styles from './edit.module.css'
 import UserService from '@/services/userservice';
 import { SchutterModel } from '@/models/schutter.model';
 import { PeletonModel } from '@/models/peleton.model';
-
-
-// function fetchInitData()
-
-
-
-
-
-
+import { getWebSocket } from '@/services/socket';
 
 export default function EditPage() {
+
+  //#region Variables / State
     const [peletonInputValue, setPeletonInputValue] = useState<string>('');
     const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peleton: string, invite: boolean }>({ name: '', peleton: '', invite: false });
     const [allSchutters, setAllSchutters] = useState<SchutterModel[]>([]);
     const [allPeletons, setAllPeletons] = useState<PeletonModel[]>([]);
+
+  //#endregion
+
+
+  //#region Functions / Handlers
+  const websocket = async () => {
+    getWebSocket();
+
+    // const unsubscribe = subscribe('PELETONS', (data: any) => { setAllPeletons(data); })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     const fetchPeletons = async () => {
@@ -35,12 +51,6 @@ export default function EditPage() {
         } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
     }
-
-
-    useEffect(() => {
-        fetchPeletons();
-        fetchSchutters();
-    }, []);
     
 
     const changePayed = (index: number, item: unknown) => {
@@ -54,10 +64,24 @@ export default function EditPage() {
     }
 
     const addSchutter = async () => {
+        console.log('PELEOTO?', schutterInputValue)
         if (schutterInputValue.name.trim() === '' || schutterInputValue.peleton.trim() === '') return;
         await UserService.addNewSchooter(schutterInputValue)
-        console.log('PELEOTO?', schutterInputValue)
     }
+  //#endregion
+
+  //#region Effects / Lifecycle
+    useEffect(() => {
+
+
+
+
+        fetchPeletons();
+        // fetchSchutters();
+    }, []);
+  //#endregion
+
+  //#region JSX / HTML
 
   return (
     <div className={styles.container} >
@@ -108,4 +132,6 @@ export default function EditPage() {
         </div>
     </div>
   );
+
+  //#endregion
 }
