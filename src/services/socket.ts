@@ -30,15 +30,23 @@
 
 export function sendOnce(message: unknown, location: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        // console.log('process.env.REACT_APP_API_URL', process.env.REACT_APP_API_URL)
-        const socket = new WebSocket(process.env.REACT_APP_API_URL + location);
 
-        socket.onopen = () => { socket.send(JSON.stringify(message)) }
-        socket.onmessage = (event) => {
+        const ws = new WebSocket(`ws://5acfced5718a.ngrok-free.app/ws?apiKey=5417250d-1f8a-4946-b6db-8f5fe3008fc6`);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({ route: location, payload: message }));
+        };
+
+        ws.onmessage = (event: MessageEvent) => {
             const response = JSON.parse(event.data);
-            resolve(response);
-            socket.close()
-        }
-        socket.onclose = (e) => { reject(e) }
-    })
+            if (response.status === 200) resolve(response.data);
+            else reject(response.data);
+            ws.close();
+        };
+
+        ws.onerror = (err) => reject(err);
+        ws.onclose = (e) => {
+            if (!e.wasClean) reject(e);
+        };
+    });
 }

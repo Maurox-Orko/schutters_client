@@ -3,56 +3,39 @@
 import { useEffect, useState } from 'react';
 import styles from './edit.module.css'
 import UserService from '@/services/userservice';
+import { SchutterModel } from '@/models/schutter.model';
+import { PeletonModel } from '@/models/peleton.model';
 
 
-const users: { name: string, peleton: string, payed: boolean, invite: number, present: number }[] = [
-    { name: 'Vanhollebeke Martin', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Decoster René ', peleton: 'parijs', payed: false, invite: 5, present: 1 },
-    { name: 'Pacqueu Olivier ', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Laforce Dirk ', peleton: 'parijs', payed: true, invite: 1, present: 6 },
-    { name: 'Buddaert David ', peleton: 'parijs', payed: false, invite: 9, present: 2 },
-    { name: 'Giraldo Daphné ', peleton: 'parijs', payed: true, invite: 1, present: 7 },
-    { name: 'Vandermaes Berny ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Vandeputte Nico ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Van Maele Thomas ', peleton: 'De daltons', payed: true, invite: 2, present: 0 },
-    { name: 'Demares Johnny ', peleton: 'De daltons', payed: false, invite: 0, present: 2 },
-    { name: 'Vanhollebeke Martin', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Decoster René ', peleton: 'parijs', payed: false, invite: 5, present: 1 },
-    { name: 'Pacqueu Olivier ', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Laforce Dirk ', peleton: 'parijs', payed: true, invite: 1, present: 6 },
-    { name: 'Buddaert David ', peleton: 'parijs', payed: false, invite: 9, present: 2 },
-    { name: 'Giraldo Daphné ', peleton: 'parijs', payed: true, invite: 1, present: 7 },
-    { name: 'Vandermaes Berny ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Vandeputte Nico ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Van Maele Thomas ', peleton: 'De daltons', payed: true, invite: 2, present: 0 },
-    { name: 'Demares Johnny ', peleton: 'De daltons', payed: false, invite: 0, present: 2 },
-    { name: 'Vanhollebeke Martin', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Decoster René ', peleton: 'parijs', payed: false, invite: 5, present: 1 },
-    { name: 'Pacqueu Olivier ', peleton: 'parijs', payed: true, invite: 1, present: 2 },
-    { name: 'Laforce Dirk ', peleton: 'parijs', payed: true, invite: 1, present: 6 },
-    { name: 'Buddaert David ', peleton: 'parijs', payed: false, invite: 9, present: 2 },
-    { name: 'Giraldo Daphné ', peleton: 'parijs', payed: true, invite: 1, present: 7 },
-    { name: 'Vandermaes Berny ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Vandeputte Nico ', peleton: 'De daltons', payed: false, invite: 1, present: 2 },
-    { name: 'Van Maele Thomas ', peleton: 'De daltons', payed: true, invite: 2, present: 0 },
-    { name: 'Demares Johnny ', peleton: 'De daltons', payed: false, invite: 0, present: 2 },
-]
 
 export default function EditPage() {
     const [peletonInputValue, setPeletonInputValue] = useState<string>('');
     const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peleton: string, invite: boolean }>({ name: '', peleton: '', invite: false });
+    const [allSchutters, setAllSchutters] = useState<SchutterModel[]>([]);
+    const [allPeletons, setAllPeletons] = useState<PeletonModel[]>([]);
+
 
     useEffect(() => {
         const fetchPeletons = async () => {
             try {
-                console.log('Fetching')
-                const peletons = await UserService.getPeletons();
-                console.log("Peletons", peletons);
+                console.log('Fetching peletons')
+                await UserService.getPeletons().then((res) => { setAllPeletons(res); });
+                console.log("Peletons", allPeletons);
             } 
             catch (error) { console.error("Failed to fetch peletons:", error); }
         };
 
+        const fetchSchutters = async () => {
+            try {
+                console.log('Fetching schutters')
+                await UserService.getAllSchutters().then((res) => { setAllSchutters(res); });
+                console.log("Schuttters", allSchutters);
+            } 
+            catch (error) { console.error("Failed to fetch Schutters:", error); }
+        }
+
         fetchPeletons();
+        fetchSchutters();
     }, []);
     
 
@@ -61,9 +44,9 @@ export default function EditPage() {
     }
 
     const addPeleton = async () => {
+        console.log('peleton name', peletonInputValue)
         if (peletonInputValue.trim() === '') return;
         await UserService.addPeletonName(peletonInputValue)
-        console.log('peleton name', peletonInputValue)
     }
 
     const addSchutter = async () => {
@@ -85,10 +68,9 @@ export default function EditPage() {
                 <input type="text" placeholder='voor- en achternaam' value={schutterInputValue.name} onChange={(e) => setSchutterInputValue({...schutterInputValue, name: e.target.value})}/>
                 <select name="" id="" value={schutterInputValue.peleton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peleton: e.target.value})}> 
                     <option value="" disabled></option>
-                    <option value="Peleton">Peleton</option>
-                    <option value="Screamingg">Screamingg</option>
-                    <option value="De daltons">De Daltons</option>
-                    <option value="Parijs">Parijs</option>
+                    { allPeletons.map((item, index) => (
+                        <option value={item.peletonID} key={index}>{ item.name }</option>
+                    ))}
                 </select>
                 <label ><input type="checkbox" checked={schutterInputValue.invite} onChange={(e) => setSchutterInputValue({...schutterInputValue, invite: e.target.checked})}/>Invité</label>
                 <button onClick={addSchutter}>Toevoegen</button>
@@ -107,7 +89,7 @@ export default function EditPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    { users.map((item, index) => (
+                    { allSchutters.map((item, index) => (
                         <tr key={index}>
                             <td>{item.name}</td>
                             <td>{item.peleton}</td>
