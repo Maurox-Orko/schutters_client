@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import styles from './edit.module.css'
 import UserService from '@/services/userservice';
 import { SchutterModel } from '@/models/schutter.model';
-import { PeletonModel } from '@/models/peleton.model';
+import { PelotonModel } from '@/models/peloton.model';
 import { getWebSocket, subscribe } from '@/services/socket';
 
 export default function EditPage() {
 
   //#region Variables / State
-    const [peletonInputValue, setPeletonInputValue] = useState<string>('');
-    const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peleton: string, invite: boolean }>({ name: '', peleton: '', invite: false });
+    const [pelotonInputValue, setPelotonInputValue] = useState<string>('');
+    const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peloton: string, invite: boolean }>({ name: '', peloton: '', invite: false });
     const [allSchutters, setAllSchutters] = useState<SchutterModel[]>([]);
-    const [allPeletons, setAllPeletons] = useState<PeletonModel[]>([]);
+    const [allPelotons, setAllPelotons] = useState<PelotonModel[]>([]);
 
   //#endregion
 
@@ -22,18 +22,18 @@ export default function EditPage() {
     const websocket = async () => {
     getWebSocket();
 
-    const unsubPeletons = subscribe('PELETONS', (data: any) => { setAllPeletons(data); setPeletonInputValue(''); });
-    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peleton: '', invite: false }); });
-    return () => { unsubPeletons(); unsubShooters() }
+    const unsubPelotons = subscribe('PELOTONS', (data: any) => { setAllPelotons(data); setPelotonInputValue(''); });
+    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peloton: '', invite: false }); });
+    return () => { unsubPelotons(); unsubShooters() }
     }
 
-    const addPeleton = async () => {
-        if (peletonInputValue.trim() === '') return;
-        await UserService.addPeletonName(peletonInputValue)
+    const addPeloton = async () => {
+        if (pelotonInputValue.trim() === '') return;
+        await UserService.addPelotonName(pelotonInputValue)
     }
 
     const addSchutter = async () => {
-        if (schutterInputValue.name.trim() === '' || schutterInputValue.peleton.trim() === '') return;
+        if (schutterInputValue.name.trim() === '' || schutterInputValue.peloton.trim() === '') return;
         await UserService.addNewSchooter(schutterInputValue)
     }
     
@@ -55,15 +55,15 @@ export default function EditPage() {
 
 
 
-    const fetchPeletons = async () => {
-        try { await UserService.getPeletons().then((res) => { setAllPeletons(res); }); } 
-        catch (error) { console.error("Failed to fetch peletons:", error); }
+    const fetchPelotons = async () => {
+        try { await UserService.getPelotons().then((res) => { setAllPelotons(res); }); } 
+        catch (error) { console.error("Failed to fetch pelotons:", error); }
     };
 
     const fetchSchutters = async () => {
         try {
             console.log('Fetching schutters')
-            await UserService.getAllSchutters().then((res) => { setAllSchutters(res); });
+            await UserService.getAllSchutters().then((res) => { setAllSchutters(res); console.log('res', res) });
             console.log("Schuttters", allSchutters);
         } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
@@ -74,7 +74,7 @@ export default function EditPage() {
     useEffect(() => {
         websocket();
 
-        fetchPeletons();
+        fetchPelotons();
         fetchSchutters();
     }, []);
   //#endregion
@@ -84,17 +84,17 @@ export default function EditPage() {
   return (
     <div className={styles.container} >
         <div className={styles.inputs}>
-            <div className={styles.peleton}>
-                <h1>Nieuw peleton</h1>
-                <input type="text" placeholder='peleton naam' value={peletonInputValue} onChange={(e) => setPeletonInputValue(e.target.value)} />
-                <button onClick={addPeleton}>Toevoegen</button>
+            <div className={styles.peloton}>
+                <h1>Nieuw peloton</h1>
+                <input type="text" placeholder='peloton naam' value={pelotonInputValue} onChange={(e) => setPelotonInputValue(e.target.value)} />
+                <button onClick={addPeloton}>Toevoegen</button>
             </div>
             <div className={styles.user}>
                 <h1>Nieuwe schutter</h1>
                 <input type="text" placeholder='voor- en achternaam' value={schutterInputValue.name} onChange={(e) => setSchutterInputValue({...schutterInputValue, name: e.target.value})}/>
-                <select name="" id="" value={schutterInputValue.peleton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peleton: e.target.value})}> 
+                <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}> 
                     <option value="" disabled></option>
-                    { allPeletons.map((item, index) => (
+                    { allPelotons.map((item, index) => (
                         <option value={item._id} key={index}>{ item.name }</option>
                     ))}
                 </select>
@@ -107,7 +107,7 @@ export default function EditPage() {
                 <thead>
                     <tr>
                         <td>Naam</td>
-                        <td>Peleton</td>
+                        <td>Peloton</td>
                         <td>Lidgeld betaald</td>
                         <td># Invité</td>
                         <td># Aanwezigen</td>
@@ -118,7 +118,7 @@ export default function EditPage() {
                     { allSchutters.map((item, index) => (
                         <tr key={index}>
                             <td>{item.name}</td>
-                            <td>{item.peleton?.name}</td>
+                            <td>{item.peloton?.name}</td>
                             <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(index, item)}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>

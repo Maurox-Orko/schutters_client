@@ -36,7 +36,7 @@ export function getWebSocket(): WebSocket {
             const response = JSON.parse(event.data);
 
             switch (response.route) {
-                case 'PELETONS': { emit('PELETONS', response.payload); break; }
+                case 'PelotonS': { emit('PelotonS', response.payload); break; }
                 case 'SHOOTERS': { emit('SHOOTERS', response.payload); break; }
                 default: {
                     break;

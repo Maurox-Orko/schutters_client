@@ -1,9 +1,9 @@
-import { PeletonModel } from "./peleton.model";
+import { PelotonModel } from "./peloton.model";
 
 export interface SchutterModel {
     _id: string,
     name: string,
-    peleton: PeletonModel,
+    peloton: PelotonModel,
     paidTime: boolean,
     invite: number,
     present: number,
