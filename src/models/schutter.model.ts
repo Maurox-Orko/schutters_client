@@ -5,7 +5,7 @@ export interface SchutterModel {
     name: string,
     peloton: PelotonModel,
     paidTime: boolean,
-    invite: number,
+    isInvite: boolean,
     present: number,
     title?: string,
 }

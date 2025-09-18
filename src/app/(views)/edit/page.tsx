@@ -120,7 +120,7 @@ export default function EditPage() {
                         <td>Naam</td>
                         <td>Peloton</td>
                         <td>Lidgeld betaald</td>
-                        <td># Invité</td>
+                        <td>Is invité</td>
                         <td># Aanwezigen</td>
                         <td></td>
                     </tr>
@@ -131,7 +131,7 @@ export default function EditPage() {
                             <td>{item.name}</td>
                             <td>{item.peloton?.name}</td>
                             <td><input type="checkbox" checked={!!item.paidTime} onChange={() => changePayed(item)} onClick={(e) => { e.stopPropagation();}}/></td>
-                            <td>{item.invite}</td>
+                            <td>{item.isInvite ? 'ja' : 'nee'}</td>
                             <td>{item.present}</td>
                             <td onClick={(e) => { e.stopPropagation(); deleteShooter(item) }}>delete</td>
                         </tr>
