@@ -15,7 +15,10 @@ const UserService = {
     async paidMembershipChange(schutter: SchutterModel): Promise<void> { await sendOnce({ schutter }, '/post/memberschip/change')},
 
     // TODO: zorg ervoor dat de aanpassingen van de schutter worden opgeslaan en via websocket de schutters terug worden meegegeven
-    async changeShooterInfo(schutter: { _id: string, name: string, peloton: string }) { await sendOnce(schutter, '/edit/shooter/info')}
+    async changeShooterInfo(schutter: { _id: string, name: string, peloton: string }): Promise<void> { await sendOnce(schutter, '/edit/shooter/info')},
+
+    // TODO: zorg ervoor dat de schutter verwijderd is en via websocket de schutters terug worden meegegeven
+    async deleteShooter(schutter: SchutterModel): Promise<void> { await sendOnce({ schutter }, '/delete/shooter')}
 
     
 }

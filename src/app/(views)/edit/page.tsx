@@ -45,7 +45,10 @@ export default function EditPage() {
     const saveChanges = async() => {
         if (editSchutter.name.trim() === '' || editSchutter.peloton.trim() === '') return;
         await UserService.changeShooterInfo(editSchutter);
+        setEditSchutter({ name: '', peloton: '', _id: '' })
     }
+
+    const deleteShooter = async (item: SchutterModel) => { await UserService.deleteShooter(item) }
 
 
 
@@ -130,7 +133,7 @@ export default function EditPage() {
                             <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(item)}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>
-                            <td>add / delete</td>
+                            <td onClick={(e) => { e.stopPropagation(); deleteShooter(item) }}>delete</td>
                         </tr>
                     ))}
                 </tbody>
