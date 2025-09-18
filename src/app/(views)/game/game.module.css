@@ -1,3 +1,109 @@
 .container {
-    
+    width: 100vw;
+    height: 100vh;
+
+    padding: 25px;
+
+    position: relative;
 }
+
+.start {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start button {
+    padding: 10px 25px;
+    font-size: 1.15rem;
+    cursor: pointer;
+}
+
+.list {
+    width: 50vw;
+    margin: auto;
+    box-sizing: border-box;
+
+    overflow-y: scroll;
+}
+
+.list li { cursor: pointer;}
+
+.header {
+    padding: 10px 15px;
+    background-color: orange;
+}
+
+.user {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 10% 40% 10% 25% 10%;
+    grid-template-rows: 1fr;
+
+    padding: 10px;
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, .35);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 50vw;
+    height: 50vh;
+
+    background-color: white;
+    border-radius: 12px;
+
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.card button {
+    padding: 10px 25px;
+    margin: auto;
+}
+
+.points {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.pointsItem {}
+
+.pointsItem label { font-size: 1.5rem; }
+
+.names {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.namesItem {}
+
+.namesItem label { font-size: 1.35rem; }
