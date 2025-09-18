@@ -14,6 +14,7 @@ export default function EditPage() {
     const [schutterInputValue, setSchutterInputValue] = useState<{ name: string, peloton: string, invite: boolean }>({ name: '', peloton: '', invite: false });
     const [allSchutters, setAllSchutters] = useState<SchutterModel[]>([]);
     const [allPelotons, setAllPelotons] = useState<PelotonModel[]>([]);
+    const [editSchutter, setEditSchutter] = useState<{ _id: string, name: string, peloton: string }>({ name: '', peloton: '', _id: '' })
 
   //#endregion
 
@@ -35,13 +36,16 @@ export default function EditPage() {
     const addSchutter = async () => {
         if (schutterInputValue.name.trim() === '' || schutterInputValue.peloton.trim() === '') return;
         await UserService.addNewShooter(schutterInputValue)
-    }
-    
+    }    
 
-    const changePayed = (index: number, item: unknown) => {
-        console.log('yooooooooo')
-    }
+    const changePayed = async (item: SchutterModel) => { await UserService.paidMembershipChange(item) }
 
+    const openSchutter = (schutter: SchutterModel) => { setEditSchutter({ name: schutter.name, _id: schutter._id, peloton: schutter.peloton.name }) }
+
+    const saveChanges = async() => {
+        if (editSchutter.name.trim() === '' || editSchutter.peloton.trim() === '') return;
+        await UserService.changeShooterInfo(editSchutter);
+    }
 
 
 
@@ -62,10 +66,10 @@ export default function EditPage() {
 
     const fetchSchutters = async () => {
         try {
-            console.log('Fetching schutters')
-            const result = await UserService.getAllSchutters();
-            console.log('result', result)
-            console.log("Schuttters", allSchutters);
+            await UserService.getAllSchutters().then((schutters) => {
+                console.log('result', schutters)
+                setAllSchutters(schutters);
+            })
         } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
     }
@@ -74,7 +78,6 @@ export default function EditPage() {
   //#region Effects / Lifecycle
     useEffect(() => {
         websocket();
-
 
         const fetchData = async () => {
             await fetchPelotons();  // wait for this to finish
@@ -121,10 +124,10 @@ export default function EditPage() {
                 </thead>
                 <tbody>
                     { allSchutters.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} className={styles.shooter} onClick={() => openSchutter(item)}>
                             <td>{item.name}</td>
                             <td>{item.peloton?.name}</td>
-                            <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(index, item)}/></td>
+                            <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(item)}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>
                             <td>add / delete</td>
@@ -133,6 +136,22 @@ export default function EditPage() {
                 </tbody>
             </table>
         </div>
+        { editSchutter._id ? 
+            <div className={styles.popup}>
+                <div className={styles.popupCard}>
+                    <h1>Bewerk schutter</h1> 
+                    <input type="text" placeholder='Achternaam Voornaam' value={editSchutter.name} onChange={(e) => setEditSchutter({...editSchutter, name: e.target.value})}/>
+                    <select name="" id="" value={editSchutter.peloton} onChange={(e) => setEditSchutter({...editSchutter, peloton: e.target.value})}> 
+                    {/* <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}>  */}
+                        <option value="" disabled></option>
+                        { allPelotons.map((item, index) => (
+                            <option value={item._id} key={index}>{ item.name }</option>
+                        ))}
+                    </select>
+                    <button onClick={saveChanges}>Wijzigingen opslaan</button>
+                </div>
+            </div> 
+        : null }
     </div>
   );
 

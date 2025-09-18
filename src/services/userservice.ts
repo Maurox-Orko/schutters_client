@@ -4,26 +4,18 @@ import { PelotonModel } from "@/models/peloton.model"
 
 const UserService = {
 
-    // TODO: als ik een peloton naam aanmaak moet ik true terug krijgen als het succesvol gelukt is
-
-
-
-
-    // TODO: change route to add new peloton name
+    // EDIT PAGINA
     async addPelotonName(name: string): Promise<void> {  await sendOnce({ name }, '/add/peloton') },
-
-    // TODO: change route to add new schooter
     async addNewShooter(schutter: { name: string, peloton: string, invite: boolean }): Promise<unknown> { return await sendOnce(schutter, '/add/shooter')},
-
-    // TODO: make sure to get pelotons
     async getPelotons(): Promise<PelotonModel[]> { return await sendOnce(null, '/get/all/pelotons')},
 
-    // TODO: get alle schutters
     async getAllSchutters(): Promise<SchutterModel[]> { return await sendOnce(null, '/get/all/shooters')},
-    
 
+    // TODO: zorg ervoor dat de status van lidgeld betaalt aanpast en via websocket de schutters terug worden meegegeven
+    async paidMembershipChange(schutter: SchutterModel): Promise<void> { await sendOnce({ schutter }, '/post/memberschip/change')},
 
-    // async checkLoginCode(code: string): Promise<boolean> { return await sendOnce(code, '/auth/login')},
+    // TODO: zorg ervoor dat de aanpassingen van de schutter worden opgeslaan en via websocket de schutters terug worden meegegeven
+    async changeShooterInfo(schutter: { _id: string, name: string, peloton: string }) { await sendOnce(schutter, '/edit/shooter/info')}
 
     
 }
