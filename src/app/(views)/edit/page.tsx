@@ -21,11 +21,11 @@ export default function EditPage() {
 
   //#region Functions / Handlers
     const websocket = async () => {
-    getWebSocket();
+        getWebSocket();
 
-    const unsubPelotons = subscribe('PELOTONS', (data: any) => { setAllPelotons(data); setPelotonInputValue(''); });
-    const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peloton: '', invite: false }); });
-    return () => { unsubPelotons(); unsubShooters() }
+        const unsubPelotons = subscribe('PELOTONS', (data: any) => { setAllPelotons(data); setPelotonInputValue(''); });
+        const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peloton: '', invite: false }); });
+        return () => { unsubPelotons(); unsubShooters() }
     }
 
     const addPeloton = async () => {
@@ -40,7 +40,7 @@ export default function EditPage() {
 
     const changePayed = async (item: SchutterModel) => { await UserService.paidMembershipChange(item) }
 
-    const openSchutter = (schutter: SchutterModel) => { setEditSchutter({ name: schutter.name, _id: schutter._id, peloton: schutter.peloton.name }) }
+    const openSchutter = (schutter: SchutterModel) => { setEditSchutter({ name: schutter.name, _id: schutter._id, peloton: schutter.peloton._id }) }
 
     const saveChanges = async() => {
         if (editSchutter.name.trim() === '' || editSchutter.peloton.trim() === '') return;
