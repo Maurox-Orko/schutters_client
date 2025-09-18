@@ -130,7 +130,7 @@ export default function EditPage() {
                         <tr key={index} className={styles.shooter} onClick={() => openSchutter(item)}>
                             <td>{item.name}</td>
                             <td>{item.peloton?.name}</td>
-                            <td><input type="checkbox" checked={item.paidTime} onChange={() => changePayed(item)}/></td>
+                            <td><input type="checkbox" checked={!!item.paidTime} onChange={() => changePayed(item)} onClick={(e) => { e.stopPropagation();}}/></td>
                             <td>{item.invite}</td>
                             <td>{item.present}</td>
                             <td onClick={(e) => { e.stopPropagation(); deleteShooter(item) }}>delete</td>
