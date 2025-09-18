@@ -98,7 +98,7 @@ export default function GamePage() {
     const [activeSchutter, setActiveSchutter] = useState<GameModel>({ _id: '', type: 'schutter', name: '', points: 0, score: [] })
     const [activePopup, setActivePopup] = useState< 'none' | 'add' | 'edit' >('none')
 
-    const getSchutters = async () => { setAllSchutters(items) }
+    const getSchutters = async () => {  UserService.getAllGameShooters().then((res) => { setAllSchutters(res) })}
 
     const openScore = (type: 'edit' | 'add', user: GameModel) => {
         setActivePopup(type);
