@@ -15,7 +15,8 @@ const UserService = {
     async deleteShooter(schutter: SchutterModel): Promise<void> { await sendOnce({ schutter }, '/delete/shooter')},
 
     // GAME PAGINA 
-    async getAllGameShooters(): Promise<GameModel[]> { return await sendOnce(null, '/get/all/game/shooters') }
+    async getAllGameShooters(): Promise<GameModel[]> { return await sendOnce(null, '/get/all/game/shooters') },
+    async addScoreToShooter(_id: string, points: number, scoreName: string): Promise<void> { await sendOnce( { _id, points, scoreName }, '/add/score/to/user' )},
 
     
 }

@@ -96,21 +96,24 @@ const items: GameModel[] = [
 export default function GamePage() {
     const [allSchutters, setAllSchutters] = useState<GameModel[]>([]);
     const [activeSchutter, setActiveSchutter] = useState<GameModel>({ _id: '', type: 'schutter', name: '', points: 0, score: [] })
-    const [activePopup, setActivePopup] = useState< 'none' | 'add' | 'edit' >('none')
+    const [activePopup, setActivePopup] = useState<'none' | 'add' | 'edit'>('none');
+    const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
 
-    const getSchutters = async () => {  UserService.getAllGameShooters().then((res) => { setAllSchutters(res) })}
+    // const getSchutters = async () => {  UserService.getAllGameShooters().then((res) => { setAllSchutters(res) })}
+    const getSchutters = async () => {  setAllSchutters(items) }
 
     const openScore = (type: 'edit' | 'add', user: GameModel) => {
         setActivePopup(type);
         setActiveSchutter(user);
-        console.log('hheheeheheheheheh')
     }
 
-    const addScore = () => {
+    const addScore = async () => {
+        await UserService.addScoreToShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name);
         setActivePopup('none');
     }
 
     const editScore = () => {
+        // await UserService.editScoreShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name)
         setActivePopup('none');
     }
 
@@ -156,60 +159,25 @@ export default function GamePage() {
                             return (
                                 <div key={num} className={styles.pointsItem}>
                                     <label htmlFor={num.toString()}>{num}</label>
-                                    <input type="radio" name="points" id={num.toString()} />
+                                    <input type="radio" name="points" id={num.toString()} value={num} checked={addScoreValues.points === num} onChange={() => setAddScoreValues(prev => ({ ...prev, points: num }))}/>
                                 </div>
                             );
                         })}
                     </div>
-                    <div className={styles.names}>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="top1">Top 1</label>
-                            <input type="radio" name="names" id="top1" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="top2">Top 2</label>
-                            <input type="radio" name="names" id="top2" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="topA">Top A</label>
-                            <input type="radio" name="names" id="topA" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="zijde1">Zijde 1</label>
-                            <input type="radio" name="names" id="zijde1" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="zijde2">Zijde 2</label>
-                            <input type="radio" name="names" id="zijde2" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="zijdeA">Zijde A</label>
-                            <input type="radio" name="names" id="zijdeA" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="kalle">Kalle</label>
-                            <input type="radio" name="names" id="kalle" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="klein">Klein</label>
-                            <input type="radio" name="names" id="klein" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="kleinA">Klein A</label>
-                            <input type="radio" name="names" id="kleinA" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="dikkop">Dikkop</label>
-                            <input type="radio" name="names" id="dikkop" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="special">Special</label>
-                            <input type="radio" name="names" id="special" />
-                        </div>
-                        <div className={styles.namessItem}>
-                            <label htmlFor="uil">Uil</label>
-                            <input type="radio" name="names" id="uil" />
-                        </div>
+                    <div className={styles.names}>  
+                        {['top1','top2','topA','zijde1','zijde2','zijdeA','kalle','klein','kleinA','dikkop','special','uil'].map(name => (
+                            <div key={name} className={styles.namessItem}>
+                            <label htmlFor={name}>{name.charAt(0).toUpperCase() + name.slice(1)}</label>
+                            <input
+                                type="radio"
+                                name="names"
+                                id={name}
+                                value={name}
+                                checked={addScoreValues.name === name}
+                                onChange={() => setAddScoreValues(prev => ({ ...prev, name }))}
+                            />
+                            </div>
+                        ))}
                     </div>
                     <button onClick={addScore}>OPSLAAN</button>
                 </div> 
