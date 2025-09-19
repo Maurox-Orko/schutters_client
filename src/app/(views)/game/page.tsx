@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './game.module.css'
 import UserService from '@/services/userservice';
 import { GameModel } from '@/models/game.model';
+import { getWebSocket, subscribe } from '@/services/socket';
 
 
 const items: GameModel[] = [
@@ -100,8 +101,13 @@ export default function GamePage() {
     const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
     const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { name: string }[] }>({ points: 0, score: [{ name: "" }] });
 
-    // const getSchutters = async () => {  UserService.getAllGameShooters().then((res) => { setAllSchutters(res) })}
-    const getSchutters = async () => {  setAllSchutters(items) }
+    const getSchutters = async () => { 
+        getWebSocket();
+        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data); });
+        UserService.startGame()
+        setAllSchutters(items); // TODO Lotte: delete later
+        return () => { unsubscribe(); }
+    }
 
     const openScore = (type: 'edit' | 'add', user: GameModel) => {
         setActivePopup(type);

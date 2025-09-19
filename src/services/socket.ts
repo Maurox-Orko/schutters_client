@@ -38,6 +38,8 @@ export function getWebSocket(): WebSocket {
             switch (response.route) {
                 case 'PELOTONS': { emit('PELOTONS', response.payload); break; }
                 case 'SHOOTERS': { emit('SHOOTERS', response.payload); break; }
+                // TODO: zorg ervoor dat ik de spelers en groepen van het spel terugkrijg
+                case 'GAME': { emit('GAME', response.payload); break; }
                 default: {
                     break;
                 }

@@ -15,10 +15,15 @@ const UserService = {
     async deleteShooter(schutter: SchutterModel): Promise<void> { await sendOnce({ schutter }, '/delete/shooter')},
 
     // GAME PAGINA 
-    async getAllGameShooters(): Promise<GameModel[]> { return await sendOnce(null, '/get/all/game/shooters') },
+    // TODO: Iedere keer dat een van deze functies wordt uitgevoerd moeten de spelers van het spel terug worden gestuurd via de websocket.
+    // TODO: sla op dat het spel start
+    async startGame(): Promise<void> { await sendOnce(null, '/start/game') },
+    // TODO: sla de score van de speler op
     async addScoreToShooter(_id: string, points: number, scoreName: string): Promise<void> { await sendOnce( { _id, points, scoreName }, '/add/score/to/user' )},
+    // TODO: sla de aangepaste score van de speler op
     async editScoreShooter(_id: string, points: number, score: { name: string }[]): Promise<void> { await sendOnce( { _id, points, score }, '/edit/score/to/user' )},
-    async togglePresent(_id: string): Promise<void> { await sendOnce({ _id }, '/toggle/shooter/presen')},
+    // TODO: het id wordt meegegeven en als de status van de speler of false (afwezig) staat dan moet hij naar true (aanwezig) en omgekeerd
+    async togglePresent(_id: string): Promise<void> { await sendOnce({ _id }, '/toggle/shooter/present')},
 
     
 }
