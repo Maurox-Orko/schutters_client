@@ -17,6 +17,8 @@ const UserService = {
     // GAME PAGINA 
     async getAllGameShooters(): Promise<GameModel[]> { return await sendOnce(null, '/get/all/game/shooters') },
     async addScoreToShooter(_id: string, points: number, scoreName: string): Promise<void> { await sendOnce( { _id, points, scoreName }, '/add/score/to/user' )},
+    async editScoreShooter(_id: string, points: number, score: { name: string }[]): Promise<void> { await sendOnce( { _id, points, score }, '/edit/score/to/user' )},
+    async togglePresent(_id: string): Promise<void> { await sendOnce({ _id }, '/toggle/shooter/presen')},
 
     
 }

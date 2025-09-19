@@ -1,103 +1,104 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './game.module.css'
 import UserService from '@/services/userservice';
-import { SchutterModel } from '@/models/schutter.model';
 import { GameModel } from '@/models/game.model';
 
 
 const items: GameModel[] = [
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
+
 
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
     { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ 'T', 'T', 'T', 'Ta', 'Td', 'P' ] },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3 },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ 'a' ] },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6 },
-    { type: 'schutter', _id: '6', name: 'Buddaert David' },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné' },
+    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
+    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
+    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
+    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
+    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
+    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
     { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny' },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico' },
+    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
+    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
 ]
 
 
 
 export default function GamePage() {
-    const [allSchutters, setAllSchutters] = useState<GameModel[]>([]);
-    const [activeSchutter, setActiveSchutter] = useState<GameModel>({ _id: '', type: 'schutter', name: '', points: 0, score: [] })
+    const [allSchutters, setAllSchutters] = useState<GameModel[]>([ new GameModel() ]);
+    const [activeSchutter, setActiveSchutter] = useState<GameModel>(new GameModel())
     const [activePopup, setActivePopup] = useState<'none' | 'add' | 'edit'>('none');
     const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
+    const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { name: string }[] }>({ points: 0, score: [{ name: "" }] });
 
     // const getSchutters = async () => {  UserService.getAllGameShooters().then((res) => { setAllSchutters(res) })}
     const getSchutters = async () => {  setAllSchutters(items) }
@@ -105,6 +106,7 @@ export default function GamePage() {
     const openScore = (type: 'edit' | 'add', user: GameModel) => {
         setActivePopup(type);
         setActiveSchutter(user);
+        if (type === "edit") { setEditScoreValues({ points: user.points ?? 0, score: user.score ?? [{ name: "" }] })}
     }
 
     const addScore = async () => {
@@ -112,10 +114,12 @@ export default function GamePage() {
         setActivePopup('none');
     }
 
-    const editScore = () => {
-        // await UserService.editScoreShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name)
+    const editScore = async () => {
+        await UserService.editScoreShooter(activeSchutter._id, editScoreValues.points, editScoreValues.score)
         setActivePopup('none');
     }
+
+    const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
 
 
 
@@ -128,7 +132,9 @@ export default function GamePage() {
     // useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
   return (
     <div className={styles.container}>
-        { allSchutters.length === 0 ? 
+        { allSchutters.length }
+        { !allSchutters[0]._id }
+        { allSchutters.length <= 1 && !allSchutters[0]._id ? 
             <div className={styles.start}>
                 <button onClick={getSchutters}>Start spel</button>
             </div> 
@@ -139,11 +145,12 @@ export default function GamePage() {
                         <li key={index} className={styles.header}>{ item.name }</li>
                     ) : (
                         <li key={index} className={styles.user} onClick={() => openScore('add', item)}>
-                            <input type="checkbox" />
+                            {/* <input type="checkbox" checked={item.present} onClick={(e) => e.stopPropagation()}/> */}
+                            <input type="checkbox" checked={item.present} onChange={(e) => { e.stopPropagation(); togglePresent(item._id); }}/>
                             <p>{ item.name }</p>
                             <p>{ item.points }</p>
-                            <p>{ item.score }</p>
-                            <p onClick={(e) => { e.preventDefault(); openScore('edit', item)}}>edit</p>
+                            <p>{item.score?.map(s => s.name).join(", ")}</p>
+                            <p onClick={(e) => { e.stopPropagation(); openScore('edit', item)}}>edit</p>
                         </li>
                     )
                 ))} 
@@ -184,23 +191,24 @@ export default function GamePage() {
             </div> 
         : activePopup === 'edit' ? 
             <div className={styles.popup}>
-                <div className={styles.card}> EDIT </div> 
+                <div className={styles.card}> 
+                    <h1>Pas score aan</h1>
+                    <input type="number" value={editScoreValues.points} onChange={(e) => setEditScoreValues(prev => ({ ...prev, points: Number(e.target.value) }))}/>
+                    <div className={styles.scoreNames}>
+                        { editScoreValues.score.map((score, index) => ( 
+                            <input key={index} type="text" value={score.name} 
+                                onChange={(e) => setEditScoreValues((prev) => {
+                                    const newScores = [...prev.score];        // copy array
+                                    newScores[index] = { ...newScores[index], name: e.target.value }; // update only this one
+                                    return { ...prev, score: newScores };     // return updated state
+                                })}
+                            /> 
+                        ))}
+                    </div>
+                    <button onClick={editScore}>Wijzigingen opslaan</button>
+                </div> 
             </div> 
         :  null}
-
-      {/* <ul className={styles.list}>
-        {items.map((item, index) => (
-            item.type === "peloton" ? (
-                <li key={index} className={styles.header}>{ item.name }</li>
-            ) : (
-                <li key={index} className={styles.user}>
-                    <p>{ item.name }</p>
-                    <p>{ item.points }</p>
-                    <p>{ item.score }</p>
-                </li>
-            )
-        ))}
-      </ul> */}
     </div>
   );
 }
