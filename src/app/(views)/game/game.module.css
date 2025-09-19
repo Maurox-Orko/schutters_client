@@ -82,6 +82,10 @@
     margin: auto;
 }
 
+
+.active { background-color: yellow; }
+.absent { opacity: .5 }
+
 .points {
     display: flex;
     flex-direction: row;

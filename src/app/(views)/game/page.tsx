@@ -110,16 +110,26 @@ export default function GamePage() {
     }
 
     const addScore = async () => {
-        await UserService.addScoreToShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name);
+        console.log('ADD SCORE ', activeSchutter._id, addScoreValues.points, addScoreValues.name)
+        // TODO Lotte: error handeling 
+        // await UserService.addScoreToShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name);
+        setAddScoreValues({ points: 0, name: '' });
         setActivePopup('none');
     }
 
     const editScore = async () => {
-        await UserService.editScoreShooter(activeSchutter._id, editScoreValues.points, editScoreValues.score)
+        // TODO Lotte: error handeling 
+        console.log('EDIT SCORE ', activeSchutter._id, editScoreValues.points, editScoreValues.score)
+        // await UserService.editScoreShooter(activeSchutter._id, editScoreValues.points, editScoreValues.score)
+        setEditScoreValues({ points: 0, score: [{ name: "" }] });
         setActivePopup('none');
     }
 
-    const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
+    // const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
+    const togglePresent = async (shooterID: string) => { 
+        console.log('TOGGLE PRESENT ', shooterID); 
+        setAllSchutters(prev => prev.map(shooter => shooter._id === shooterID ? { ...shooter, present: !shooter.present } : shooter ))
+    }
 
 
 
@@ -132,8 +142,6 @@ export default function GamePage() {
     // useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
   return (
     <div className={styles.container}>
-        { allSchutters.length }
-        { !allSchutters[0]._id }
         { allSchutters.length <= 1 && !allSchutters[0]._id ? 
             <div className={styles.start}>
                 <button onClick={getSchutters}>Start spel</button>
@@ -144,9 +152,9 @@ export default function GamePage() {
                     item.type === "peloton" ? (
                         <li key={index} className={styles.header}>{ item.name }</li>
                     ) : (
-                        <li key={index} className={styles.user} onClick={() => openScore('add', item)}>
+                        <li key={index} className={`${styles.user} ${item._id === activeSchutter._id ? styles.active : ''} ${!item.present ? styles.absent : ''}`} onClick={() => openScore('add', item)} >
                             {/* <input type="checkbox" checked={item.present} onClick={(e) => e.stopPropagation()}/> */}
-                            <input type="checkbox" checked={item.present} onChange={(e) => { e.stopPropagation(); togglePresent(item._id); }}/>
+                            <input type="checkbox" checked={!!item.present} onChange={(e) => { e.stopPropagation(); togglePresent(item._id); }} onClick={(e) => e.stopPropagation()}/>
                             <p>{ item.name }</p>
                             <p>{ item.points }</p>
                             <p>{item.score?.map(s => s.name).join(", ")}</p>
