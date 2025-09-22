@@ -24,6 +24,8 @@ const UserService = {
     async editScoreShooter(_id: string, points: number, score: { name: string }[]): Promise<void> { await sendOnce( { _id, points, score }, '/edit/score/to/user' )},
     // TODO: het id wordt meegegeven en als de status van de speler of false (afwezig) staat dan moet hij naar true (aanwezig) en omgekeerd
     async togglePresent(_id: string): Promise<void> { await sendOnce({ _id }, '/toggle/shooter/present')},
+    // TODO: get all peletons for game
+    async getGamePelotons(): Promise<PelotonModel[]> { return await sendOnce(null, '/get/game/pelotons')},
 
     
 }

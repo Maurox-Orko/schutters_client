@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './game.module.css'
 import UserService from '@/services/userservice';
 import { GameModel } from '@/models/game.model';
 import { getWebSocket, subscribe } from '@/services/socket';
+import { PelotonModel } from '@/models/peloton.model';
 
 
 const items: GameModel[] = [
@@ -100,6 +101,12 @@ export default function GamePage() {
     const [activePopup, setActivePopup] = useState<'none' | 'add' | 'edit'>('none');
     const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
     const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { name: string }[] }>({ points: 0, score: [{ name: "" }] });
+    const [gamePelotons, setGamePelotons] = useState<PelotonModel[]>([])
+    
+
+    // TODO lotte: check waar ik game pelotons moet terug sturen
+    // TODO lotte: if get pelotons is run i need to get websocket back
+    useEffect(() => { getPelotons().then(res => { setGamePelotons(res); })})
 
     const getSchutters = async () => { 
         getWebSocket();
@@ -136,6 +143,8 @@ export default function GamePage() {
         console.log('TOGGLE PRESENT ', shooterID); 
         setAllSchutters(prev => prev.map(shooter => shooter._id === shooterID ? { ...shooter, present: !shooter.present } : shooter ))
     }
+
+    const getPelotons = async() => { return await UserService.getGamePelotons() }
 
 
 
