@@ -1,8 +1,19 @@
 export class GameModel {
   _id: string = '';
-  type: 'peloton' | 'schutter' = 'peloton';
+  pelotons: GamePelotonModel[] = [];
+}
+
+export class GamePelotonModel {
+  _id: string = '';
   name: string = '';
-  points?: number;
-  score?: { name: string }[];
-  present?: boolean = false;
+  shooters: GameShooterModel[] = [];
+}
+
+export class GameShooterModel {
+  _id: string = "";
+  name: string = "";
+  title: string = "";
+  points: number = 0;
+  marks: { name: string, _id: string }[] = [];
+  presentTime: string = "";
 }

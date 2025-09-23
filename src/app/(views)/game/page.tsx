@@ -1,136 +1,47 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './game.module.css'
 import UserService from '@/services/userservice';
-import { GameModel } from '@/models/game.model';
+import { GameModel, GamePelotonModel, GameShooterModel } from '@/models/game.model';
 import { getWebSocket, subscribe } from '@/services/socket';
 import { PelotonModel } from '@/models/peloton.model';
 
 
-const items: GameModel[] = [
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-
-
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-    { type: 'peloton', _id: '1', name: 'Parijs' },
-    { type: 'schutter', _id: '2', name: 'Vanhollebeke Martin', points: 1, score: [ { name: 'T' }, { name: 'T' }, { name: 'T' }, { name: 'Ta' }, { name: 'Td' }, { name: 'P' } ], present: false },
-    { type: 'schutter', _id: '3', name: 'Decoster René', points: 3, present: false },
-    { type: 'schutter', _id: '4', name: 'Pacque Olivier', points: 5, score: [ { name: 'a' } ], present: false },
-    { type: 'schutter', _id: '5', name: 'LaForce Dirk', points: 6, present: false },
-    { type: 'schutter', _id: '6', name: 'Buddaert David', present: false },
-    { type: 'schutter', _id: '7', name: 'Giraldo Daphné', present: false },
-    { type: 'peloton', _id: '8', name: 'De Daltons' },
-    { type: 'schutter', _id: '9', name: 'Vandermaes Berny', present: false },
-    { type: 'schutter', _id: '10', name: 'Vandeputte Nico', present: false },
-]
-
-
 
 export default function GamePage() {
-    const [allSchutters, setAllSchutters] = useState<GameModel[]>([ new GameModel() ]);
-    const [activeSchutter, setActiveSchutter] = useState<GameModel>(new GameModel())
+    const [allSchutters, setAllSchutters] = useState<GamePelotonModel[]>([ new GamePelotonModel() ]);
+    const [activeSchutter, setActiveSchutter] = useState<GameShooterModel>(new GameShooterModel());
     const [activePopup, setActivePopup] = useState<'none' | 'add' | 'edit'>('none');
     const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
     const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { name: string }[] }>({ points: 0, score: [{ name: "" }] });
-    const [gamePelotons, setGamePelotons] = useState<PelotonModel[]>([])
+    const [gameID, setGameID] = useState<string>('')
     
 
-    // TODO lotte: check waar ik game pelotons moet terug sturen
-    // TODO lotte: if get pelotons is run i need to get websocket back
-    useEffect(() => { getPelotons().then(res => { setGamePelotons(res); })})
+    useEffect(() => { getGame().then(res => { setAllSchutters(res.pelotons); setGameID(res._id) })}, [])
 
     const getSchutters = async () => { 
         getWebSocket();
-        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data); });
+        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data.pelotons); setGameID(data._id) });
         UserService.startGame()
-        setAllSchutters(items); // TODO Lotte: delete later
         return () => { unsubscribe(); }
     }
 
-    const openScore = (type: 'edit' | 'add', user: GameModel) => {
+    const openScore = (type: 'edit' | 'add', user: GameShooterModel) => {
         setActivePopup(type);
         setActiveSchutter(user);
-        if (type === "edit") { setEditScoreValues({ points: user.points ?? 0, score: user.score ?? [{ name: "" }] })}
+        if (type === "edit") { setEditScoreValues({ points: user.points ?? 0, score: user.marks ?? [{ name: "" }] })}
     }
 
-    const addScore = async () => {
-        console.log('ADD SCORE ', activeSchutter._id, addScoreValues.points, addScoreValues.name)
+    const addScore = async () => {        
         // TODO Lotte: error handeling 
-        // await UserService.addScoreToShooter(activeSchutter._id, addScoreValues.points, addScoreValues.name);
+        await UserService.addScoreToShooter(gameID, activeSchutter._id, addScoreValues.points, addScoreValues.name);
         setAddScoreValues({ points: 0, name: '' });
         setActivePopup('none');
     }
 
     const editScore = async () => {
+        // markID
         // TODO Lotte: error handeling 
         console.log('EDIT SCORE ', activeSchutter._id, editScoreValues.points, editScoreValues.score)
         // await UserService.editScoreShooter(activeSchutter._id, editScoreValues.points, editScoreValues.score)
@@ -141,10 +52,10 @@ export default function GamePage() {
     // const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
     const togglePresent = async (shooterID: string) => { 
         console.log('TOGGLE PRESENT ', shooterID); 
-        setAllSchutters(prev => prev.map(shooter => shooter._id === shooterID ? { ...shooter, present: !shooter.present } : shooter ))
+        // setAllSchutters(prev => prev.map(shooter => shooter._id === shooterID ? { ...shooter, present: !shooter.present } : shooter ))
     }
 
-    const getPelotons = async() => { return await UserService.getGamePelotons() }
+    const getGame = async() => { return await UserService.getGame() }
 
 
 
@@ -157,26 +68,27 @@ export default function GamePage() {
     // useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
   return (
     <div className={styles.container}>
-        { allSchutters.length <= 1 && !allSchutters[0]._id ? 
+        { !allSchutters || (allSchutters.length <= 1 && !allSchutters[0]._id)  ? 
             <div className={styles.start}>
                 <button onClick={getSchutters}>Start spel</button>
             </div> 
             :
             <ul className={styles.list}> 
-                {allSchutters.map((item, index) => (
-                    item.type === "peloton" ? (
-                        <li key={index} className={styles.header}>{ item.name }</li>
-                    ) : (
-                        <li key={index} className={`${styles.user} ${item._id === activeSchutter._id ? styles.active : ''} ${!item.present ? styles.absent : ''}`} onClick={() => openScore('add', item)} >
-                            {/* <input type="checkbox" checked={item.present} onClick={(e) => e.stopPropagation()}/> */}
-                            <input type="checkbox" checked={!!item.present} onChange={(e) => { e.stopPropagation(); togglePresent(item._id); }} onClick={(e) => e.stopPropagation()}/>
-                            <p>{ item.name }</p>
-                            <p>{ item.points }</p>
-                            <p>{item.score?.map(s => s.name).join(", ")}</p>
-                            <p onClick={(e) => { e.stopPropagation(); openScore('edit', item)}}>edit</p>
+                {allSchutters.map((item) => (
+                    <React.Fragment key={item._id}>
+                    <li className={styles.header}>{item.name}</li>
+
+                    {item.shooters.map((shooter) => (
+                        <li key={shooter._id} className={`${styles.user} ${shooter._id === activeSchutter?._id ? styles.active : ''} ${!shooter.presentTime ? styles.absent : ''}`} onClick={() => openScore('add', shooter)}>
+                        <input type="checkbox" checked={!!shooter.presentTime} onChange={(e) => { e.stopPropagation(); togglePresent(shooter._id); }} onClick={(e) => e.stopPropagation()} />
+                        <p>{shooter.name}</p>
+                        <p>{shooter.points}</p>
+                        <p>{shooter.marks?.map((s) => s.name).join(', ')}</p>
+                        <p onClick={(e) => { e.stopPropagation(); openScore('edit', shooter); }}> edit </p>
                         </li>
-                    )
-                ))} 
+                    ))}
+                    </React.Fragment>
+                ))}
             </ul>
         }
         { activePopup === 'add' ? 
