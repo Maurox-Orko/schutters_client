@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './game.module.css'
 import UserService from '@/services/userservice';
-import { GameModel, GamePelotonModel, GameShooterModel } from '@/models/game.model';
+import { GamePelotonModel, GameShooterModel } from '@/models/game.model';
 import { getWebSocket, subscribe } from '@/services/socket';
-import { PelotonModel } from '@/models/peloton.model';
 
 
 
@@ -18,7 +17,7 @@ export default function GamePage() {
     const [gameID, setGameID] = useState<string>('')
     
 
-    useEffect(() => { getGame().then(res => { setAllSchutters(res.pelotons); setGameID(res._id) })}, [])
+    useEffect(() => { getGame().then(res => { setAllSchutters(res.pelotons); setGameID(res.shootingID); })}, [])
 
     const getSchutters = async () => { 
         getWebSocket();

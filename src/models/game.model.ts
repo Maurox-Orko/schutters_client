@@ -1,5 +1,5 @@
 export class GameModel {
-  _id: string = '';
+  shootingID: string = '';
   pelotons: GamePelotonModel[] = [];
 }
 
