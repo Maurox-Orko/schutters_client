@@ -19,7 +19,7 @@ const UserService = {
     // TODO: sla op dat het spel start
     async startGame(): Promise<void> { await sendOnce(null, '/start/game') },
     // TODO: sla de score van de speler op
-    async addScoreToShooter(shootingID: string, _id: string, points: number, scoreName: string): Promise<void> { await sendOnce( { shootingID, _id, points, scoreName }, '/add/score/to/user' )},
+    async addScoreToShooter(shootingID: string, _id: string, points: number, mark: string): Promise<void> { await sendOnce( { shootingID, _id, points, mark }, '/add/score/to/user' )},
     // TODO: sla de aangepaste score van de speler op
     async editScoreShooter(_id: string, points: number, score: { name: string }[]): Promise<void> { await sendOnce( { _id, points, score }, '/edit/score/to/user' )},
     // TODO: het id wordt meegegeven en als de status van de speler of false (afwezig) staat dan moet hij naar true (aanwezig) en omgekeerd
