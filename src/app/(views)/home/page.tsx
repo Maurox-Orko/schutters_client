@@ -2,7 +2,9 @@
 
 import UserService from '@/services/userservice';
 import styles from './home.module.css'
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { GamePelotonModel } from '@/models/game.model';
+import { getWebSocket, subscribe } from '@/services/socket';
 
 const items: { type: 'peloton' | 'schutter', name: string, points?: number, score?: string[] }[] = [
     { type: 'peloton', name: 'Parijs' },
@@ -97,25 +99,218 @@ const items: { type: 'peloton' | 'schutter', name: string, points?: number, scor
 
 
 export default function HomePage() {
-    useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
+    const [allSchutters, setAllSchutters] = useState<GamePelotonModel[]>([ new GamePelotonModel() ]);
+
+    useEffect(() => { 
+      getGame().then(res => { 
+        setAllSchutters(res.pelotons); 
+        startWebsocket();
+      })
+    }, []);
+
+
+    const getGame = async() => { return await UserService.getGame() }
+    
+      const startWebsocket = () => { 
+        getWebSocket(); 
+        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data.pelotons); })
+        return () => { unsubscribe(); }
+      }
+
+
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {items.map((item, index) => (
-            item.type === "peloton" ? (
-                <li key={index} className={styles.header}>{ item.name }</li>
-            ) : (
-                <li key={index} className={styles.user}>
-                    <p>{ item.name }</p>
-                    <p>{ item.points }</p>
-                    <p>{ item.score }</p>
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
                 </li>
-            )
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
+        ))}
+
+
+
+        
+        { allSchutters.map((item, index) => (
+            <React.Fragment key={item._id}>
+              <li key={index} className={styles.header}>{ item.name }</li>
+              { item.shooters.map((shooter,sIndex) => (
+                <li key={sIndex} className={styles.user}>
+                    <p>{ shooter.name }</p>
+                    <p>{ shooter.points }</p>
+                    <p>{ shooter.marks.map((s) => s.label).join(', ') }</p>
+                </li>
+              ))}
+            </React.Fragment>
         ))}
       </ul>
     </div>
   );
 }
-
-
 

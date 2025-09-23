@@ -14,6 +14,6 @@ export class GameShooterModel {
   name: string = "";
   title: string = "";
   points: number = 0;
-  marks: { name: string, _id: string }[] = [];
+  marks: { label: string, _id: string }[] = [];
   presentTime: string = "";
 }

@@ -13,23 +13,25 @@ export default function GamePage() {
     const [activeSchutter, setActiveSchutter] = useState<GameShooterModel>(new GameShooterModel());
     const [activePopup, setActivePopup] = useState<'none' | 'add' | 'edit'>('none');
     const [addScoreValues, setAddScoreValues] = useState<{ points: number, name: string }>({ points: 0, name: '' })
-    const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { name: string }[] }>({ points: 0, score: [{ name: "" }] });
+    const [editScoreValues, setEditScoreValues] = useState<{ points: number, score: { label: string }[] }>({ points: 0, score: [{ label: "" }] });
     const [gameID, setGameID] = useState<string>('')
     
 
-    useEffect(() => { getGame().then(res => { setAllSchutters(res.pelotons); setGameID(res.shootingID); })}, [])
+    useEffect(() => { getGame().then(res => { 
+        setAllSchutters(res.pelotons); 
+        setGameID(res.shootingID); 
+        startWebsocket();
+    })}, [])
 
     const getSchutters = async () => { 
-        getWebSocket();
-        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data.pelotons); setGameID(data._id) });
+        startWebsocket();
         UserService.startGame()
-        return () => { unsubscribe(); }
     }
 
     const openScore = (type: 'edit' | 'add', user: GameShooterModel) => {
         setActivePopup(type);
         setActiveSchutter(user);
-        if (type === "edit") { setEditScoreValues({ points: user.points ?? 0, score: user.marks ?? [{ name: "" }] })}
+        if (type === "edit") { setEditScoreValues({ points: user.points ?? 0, score: user.marks ?? [{ label: "" }] })}
     }
 
     const addScore = async () => {        
@@ -40,25 +42,36 @@ export default function GamePage() {
     }
 
     const editScore = async () => {
-        // markID
+        // TODO: Deze werkt nog niet
         // TODO Lotte: error handeling 
         console.log('EDIT SCORE ', activeSchutter._id, editScoreValues.points, editScoreValues.score)
         // await UserService.editScoreShooter(activeSchutter._id, editScoreValues.points, editScoreValues.score)
-        setEditScoreValues({ points: 0, score: [{ name: "" }] });
+        setEditScoreValues({ points: 0, score: [{ label: "" }] });
         setActivePopup('none');
     }
 
-    // const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
-    const togglePresent = async (shooterID: string) => { 
-        console.log('TOGGLE PRESENT ', shooterID); 
-        // setAllSchutters(prev => prev.map(shooter => shooter._id === shooterID ? { ...shooter, present: !shooter.present } : shooter ))
-    }
+    const togglePresent = async (shooterID: string) => { await UserService.togglePresent(shooterID) }
 
     const getGame = async() => { return await UserService.getGame() }
 
+    const startWebsocket = () => { 
+        getWebSocket(); 
+        const unsubscribe = subscribe('GAME', (data: any) => { setAllSchutters(data.pelotons); setGameID(data._id) })
+        return () => { unsubscribe(); }
+    }
 
 
 
+
+
+    const isTodayPresent = (dateString: string) => {
+        if (!dateString) return false;
+        const date = new Date(dateString);
+        const today = new Date();
+        return date.getDate() === today.getDate() &&
+               date.getMonth() === today.getMonth() &&
+               date.getFullYear() === today.getFullYear();
+    }
 
 
 
@@ -79,10 +92,10 @@ export default function GamePage() {
 
                     {item.shooters.map((shooter) => (
                         <li key={shooter._id} className={`${styles.user} ${shooter._id === activeSchutter?._id ? styles.active : ''} ${!shooter.presentTime ? styles.absent : ''}`} onClick={() => openScore('add', shooter)}>
-                        <input type="checkbox" checked={!!shooter.presentTime} onChange={(e) => { e.stopPropagation(); togglePresent(shooter._id); }} onClick={(e) => e.stopPropagation()} />
+                        <input type="checkbox" checked={isTodayPresent(shooter.presentTime)} onChange={(e) => { e.stopPropagation(); togglePresent(shooter._id); }} onClick={(e) => e.stopPropagation()} />
                         <p>{shooter.name}</p>
                         <p>{shooter.points}</p>
-                        <p>{shooter.marks?.map((s) => s.name).join(', ')}</p>
+                        <p>{shooter.marks.map((s) => s.label).join(', ')}</p>
                         <p onClick={(e) => { e.stopPropagation(); openScore('edit', shooter); }}> edit </p>
                         </li>
                     ))}
@@ -130,10 +143,10 @@ export default function GamePage() {
                     <input type="number" value={editScoreValues.points} onChange={(e) => setEditScoreValues(prev => ({ ...prev, points: Number(e.target.value) }))}/>
                     <div className={styles.scoreNames}>
                         { editScoreValues.score.map((score, index) => ( 
-                            <input key={index} type="text" value={score.name} 
+                            <input key={index} type="text" value={score.label} 
                                 onChange={(e) => setEditScoreValues((prev) => {
                                     const newScores = [...prev.score];        // copy array
-                                    newScores[index] = { ...newScores[index], name: e.target.value }; // update only this one
+                                    newScores[index] = { ...newScores[index], label: e.target.value }; // update only this one
                                     return { ...prev, score: newScores };     // return updated state
                                 })}
                             /> 
