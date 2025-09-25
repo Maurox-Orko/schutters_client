@@ -17,11 +17,13 @@ export default function GamePage() {
     const [gameID, setGameID] = useState<string>('')
     
 
-    useEffect(() => { getGame().then(res => { 
-        setAllSchutters(res.pelotons); 
-        setGameID(res.shootingID); 
-        startWebsocket();
-    })}, [])
+    useEffect(() => { 
+        getGame().then(res => { 
+            setAllSchutters(res.pelotons); 
+            setGameID(res.shootingID); 
+            startWebsocket();
+        }).catch(err => { console.warn("Game fetch failed (handled):", err instanceof Error ? err.message : err); });
+    }, [])
 
     const getSchutters = async () => { 
         startWebsocket();
