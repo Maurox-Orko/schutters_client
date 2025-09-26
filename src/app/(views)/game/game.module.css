@@ -32,7 +32,14 @@
 
 .header {
     padding: 10px 15px;
-    background-color: orange;
+    background-color: var(--secondary);
+    border-radius: 10px;
+    margin-top: 15px;
+
+    font-size: 1rem;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
 .user {
@@ -42,6 +49,7 @@
     grid-template-rows: 1fr;
 
     padding: 10px;
+    border-radius: 10px;
 }
 
 .popup {
@@ -81,7 +89,7 @@
 }
 
 
-.active { background-color: yellow; }
+.active { background-color: #05395985; }
 .absent { opacity: .5 }
 
 .points {

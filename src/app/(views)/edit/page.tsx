@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from 'react';
-import styles from './edit.module.css'
+import { useEffect, useRef, useState } from 'react';
+import styles from './edit.module.scss'
 import UserService from '@/services/userservice';
 import { SchutterModel } from '@/models/schutter.model';
 import { PelotonModel } from '@/models/peloton.model';
@@ -25,7 +25,7 @@ export default function EditPage() {
         getWebSocket();
 
         const unsubPelotons = subscribe('PELOTONS', (data: any) => { setAllPelotons(data); setPelotonInputValue(''); });
-        const unsubShooters = subscribe('SHOOTERS', (data: any) => { console.log('SHOOTERS RESULT', data); setAllSchutters(data); setSchutterInputValue({ name: '', peloton: '', invite: false }); });
+        const unsubShooters = subscribe('SHOOTERS', (data: any) => { setAllSchutters(data); setSchutterInputValue({ name: '', peloton: '', invite: false }); });
         return () => { unsubPelotons(); unsubShooters() }
     }
 
@@ -64,17 +64,12 @@ export default function EditPage() {
 
 
     const fetchPelotons = async () => {
-        try { await UserService.getPelotons().then((peletons) => { setAllPelotons(peletons); console.log('PELETONSSS', peletons) }); } 
+        try { await UserService.getPelotons().then((peletons) => { setAllPelotons(peletons); }); } 
         catch (error) { console.error("Failed to fetch pelotons:", error); }
     };
 
     const fetchSchutters = async () => {
-        try {
-            await UserService.getAllSchutters().then((schutters) => {
-                console.log('result', schutters)
-                setAllSchutters(schutters);
-            })
-        } 
+        try { await UserService.getAllSchutters().then((schutters) => { setAllSchutters(schutters); }) } 
         catch (error) { console.error("Failed to fetch Schutters:", error); }
     }
   //#endregion
@@ -94,42 +89,50 @@ export default function EditPage() {
   //#region JSX / HTML
 
   return (
-    <div className={styles.container} >
+    <div className={styles.container}>
         <Navigation/>
         <div className={styles.inputs}>
-            <div className={styles.peloton}>
-                <h1 className={styles.h1}>Nieuw peloton</h1>
-                <input type="text" placeholder='peloton naam' value={pelotonInputValue} onChange={(e) => setPelotonInputValue(e.target.value)} />
+            <div className={styles.inputs__peleton}>
+                <h1>Nieuw peleton</h1>
+                <input type="text" placeholder='peloton naam' value={pelotonInputValue} onChange={(e) => setPelotonInputValue(e.target.value)}/>
                 <button onClick={addPeloton}>Toevoegen</button>
             </div>
-            <div className={styles.user}>
-                <h1 className={styles.h1}>Nieuwe schutter</h1>
+            <div className={styles.inputs__user}>
+                <h1>Nieuwe schutter</h1>
                 <input type="text" placeholder='voor- en achternaam' value={schutterInputValue.name} onChange={(e) => setSchutterInputValue({...schutterInputValue, name: e.target.value})}/>
-                <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}> 
-                    <option value="" disabled></option>
+                 <select name="" id="" style={{ color: schutterInputValue.peloton === '' ? 'gray' : 'black'}} value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}> 
+                    <option value="" disabled>Kies een peleton</option>
                     { allPelotons.map((item, index) => (
                         <option value={item._id} key={index}>{ item.name }</option>
                     ))}
                 </select>
-                <label ><input type="checkbox" checked={schutterInputValue.invite} onChange={(e) => setSchutterInputValue({...schutterInputValue, invite: e.target.checked})}/>Invité</label>
+                <label><input type="checkbox" checked={schutterInputValue.invite} onChange={(e) => setSchutterInputValue({...schutterInputValue, invite: e.target.checked})}/>Invité</label>
                 <button onClick={addSchutter}>Toevoegen</button>
             </div>
         </div>
         <div className={styles.outputs}>
-            <table className={styles.table}>
+            <table>
+                <colgroup>
+                    <col style={{ width: '35%' }}/>
+                    <col style={{ width: '20%' }}/>
+                    <col style={{ width: '5%' }}/>
+                    <col style={{ width: '15%' }}/>
+                    <col style={{ width: '15%' }}/>
+                    <col style={{ width: '10%' }}/>
+                </colgroup>
                 <thead>
-                    <tr>
+                     <tr>
                         <td>Naam</td>
                         <td>Peloton</td>
-                        <td>Lidgeld betaald</td>
+                        <td>Lidgeld</td>
                         <td>Is invité</td>
                         <td># Aanwezigen</td>
                         <td></td>
-                    </tr>
-                </thead>
-                <tbody>
+                     </tr>
+                 </thead>
+                 <tbody>
                     { allSchutters.map((item, index) => (
-                        <tr key={index} className={styles.shooter} onClick={() => openSchutter(item)}>
+                        <tr key={index} onClick={() => openSchutter(item)}>
                             <td>{item.name}</td>
                             <td>{item.peloton?.name}</td>
                             <td><input type="checkbox" checked={!!item.paidTime} onChange={() => changePayed(item)} onClick={(e) => { e.stopPropagation();}}/></td>
@@ -145,14 +148,16 @@ export default function EditPage() {
             <div className={styles.popup}>
                 <div className={styles.popupCard}>
                     <h1>Bewerk schutter</h1> 
-                    <input type="text" placeholder='Achternaam Voornaam' value={editSchutter.name} onChange={(e) => setEditSchutter({...editSchutter, name: e.target.value})}/>
-                    <select name="" id="" value={editSchutter.peloton} onChange={(e) => setEditSchutter({...editSchutter, peloton: e.target.value})}> 
-                    {/* <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}>  */}
-                        <option value="" disabled></option>
-                        { allPelotons.map((item, index) => (
-                            <option value={item._id} key={index}>{ item.name }</option>
-                        ))}
-                    </select>
+                    <div className={styles.popupCard__inputs}>
+                        <input type="text" placeholder='Achternaam Voornaam' value={editSchutter.name} onChange={(e) => setEditSchutter({...editSchutter, name: e.target.value})}/>
+                        <select name="" id="" value={editSchutter.peloton} onChange={(e) => setEditSchutter({...editSchutter, peloton: e.target.value})}> 
+                        {/* <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}>  */}
+                            <option value="" disabled></option>
+                            { allPelotons.map((item, index) => (
+                                <option value={item._id} key={index}>{ item.name }</option>
+                            ))}
+                        </select>
+                    </div>
                     <button onClick={saveChanges}>Wijzigingen opslaan</button>
                 </div>
             </div> 

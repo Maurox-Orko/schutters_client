@@ -39,9 +39,12 @@
 
     text-transform: uppercase;
     font-weight: 600;
-    background-color: orangered;
+    background-color: var(--secondary);
     color: white;
-    padding: 5px;
+    padding: 5px 15px;
+    border-radius: 10px;
+
+    margin-top: 15px;
 }
 
 .user {
@@ -70,5 +73,5 @@
 .noText {
     font-size: 2rem;
     font-weight: 600;
-    color: orangered;
+    color: var(--primary);
 }

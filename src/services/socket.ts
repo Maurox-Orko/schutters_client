@@ -72,15 +72,12 @@ export function sendOnce(payload: unknown, route: string): Promise<any> {
     return new Promise((resolve, reject) => {
         const socket = getWebSocket();
 
-        console.log('router', route)
-
         if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ route, payload }));
         else messageQueue.push({ route, payload, resolve, reject });
 
         const listener = (event: MessageEvent) => {
             const response = JSON.parse(event.data);
             if (response.status !== undefined) {
-                console.log('RESPONSE DATA', response.data)
                 if (response.status === 200) resolve(response.data);
                 else reject(response.data);
                 socket.removeEventListener('message', listener);

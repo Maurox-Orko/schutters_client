@@ -1,6 +1,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --primary: #053959;
+  --secondary: #D9AC59;
+  --third: #A5BF45;
+  --fourth: #F20519;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,3 +45,18 @@ a {
     color-scheme: dark;
   }
 }
+
+
+
+
+/* MAIN COLOR */
+/* #053959 */
+
+/* SECONDARY COLOR */
+/* #D9AC59 */
+
+/* THIRD COLOR */
+/* #A5BF45 */
+
+/* FOURTH COLOR */
+/* #F20519 */

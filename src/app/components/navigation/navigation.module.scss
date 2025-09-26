@@ -48,12 +48,17 @@
 .navigation__button {
     padding: 10px 20px;
 
-    background-color: rgb(227, 227, 227);
-    color: orangered;
+    background-color: var(--primary);
+    color: white;
     font-size: 1rem;
     font-weight: 600;
     border: none;
     border-radius: 5px;
 
     cursor: pointer;
+
+    &.active {
+        background-color: var(--secondary);
+        color: var(--primary);
+    }
 }
