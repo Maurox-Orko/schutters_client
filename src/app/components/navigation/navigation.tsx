@@ -6,10 +6,16 @@ import title from "../../../../public/title.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/stores/isLoggedIn.store";
+import { useEffect, useState } from "react";
 
 export default function Navigation() {
-
     const { isLoggedIn, login } = useAuth();
+
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => { setHydrated(true); }, []);
+
+    if (!hydrated) return null; 
 
     return (
         <div className={styles.container}>

@@ -6,6 +6,7 @@ import UserService from '@/services/userservice';
 import { SchutterModel } from '@/models/schutter.model';
 import { PelotonModel } from '@/models/peloton.model';
 import { getWebSocket, subscribe } from '@/services/socket';
+import Navigation from '@/app/components/navigation/navigation';
 
 export default function EditPage() {
 
@@ -94,14 +95,15 @@ export default function EditPage() {
 
   return (
     <div className={styles.container} >
+        <Navigation/>
         <div className={styles.inputs}>
             <div className={styles.peloton}>
-                <h1>Nieuw peloton</h1>
+                <h1 className={styles.h1}>Nieuw peloton</h1>
                 <input type="text" placeholder='peloton naam' value={pelotonInputValue} onChange={(e) => setPelotonInputValue(e.target.value)} />
                 <button onClick={addPeloton}>Toevoegen</button>
             </div>
             <div className={styles.user}>
-                <h1>Nieuwe schutter</h1>
+                <h1 className={styles.h1}>Nieuwe schutter</h1>
                 <input type="text" placeholder='voor- en achternaam' value={schutterInputValue.name} onChange={(e) => setSchutterInputValue({...schutterInputValue, name: e.target.value})}/>
                 <select name="" id="" value={schutterInputValue.peloton} onChange={(e) => setSchutterInputValue({...schutterInputValue, peloton: e.target.value})}> 
                     <option value="" disabled></option>

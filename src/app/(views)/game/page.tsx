@@ -5,6 +5,7 @@ import styles from './game.module.css'
 import UserService from '@/services/userservice';
 import { GamePelotonModel, GameShooterModel } from '@/models/game.model';
 import { getWebSocket, subscribe } from '@/services/socket';
+import Navigation from '@/app/components/navigation/navigation';
 
 
 
@@ -82,6 +83,7 @@ export default function GamePage() {
     // useEffect(() => { UserService.getAllSchutters().then((res) => console.log('res', res)) }, []);
   return (
     <div className={styles.container}>
+        <Navigation/>
         { !allSchutters || (allSchutters.length <= 1 && !allSchutters[0]._id)  ? 
             <div className={styles.start}>
                 <button onClick={getSchutters}>Start spel</button>
